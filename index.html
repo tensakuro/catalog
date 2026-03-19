@@ -312,7 +312,23 @@ function getImageUrl(name, cat) {
   return `https://source.unsplash.com/400x300/?${q}`;
 }
 
-let items = JSON.parse(localStorage.getItem('shoplist_v3') || '[]');
+const DEFAULT_ITEMS = [
+  { id:1001, name:'Lyocell Shirt — H&M', price:2499, link:'https://www.myntra.com/shirts/hm', cat:'Clothing', priority:'high', note:'100% Lyocell, fluid silhouette, elevated casual', imgUrl:'https://source.unsplash.com/400x300/?lyocell,shirt,minimal', bought:false, date:1700000001 },
+  { id:1002, name:'Lyocell Shirt — ZARA', price:2999, link:'https://www.zara.com/in/', cat:'Clothing', priority:'high', note:'100% Lyocell, sharper cut, smart-casual', imgUrl:'https://source.unsplash.com/400x300/?zara,shirt,men', bought:false, date:1700000002 },
+  { id:1003, name:'White Tailored Trousers', price:3499, link:'https://www.myntra.com/trousers', cat:'Clothing', priority:'high', note:'100% Cotton, tailored fit, clean minimal base', imgUrl:'https://source.unsplash.com/400x300/?white,trousers,tailored,men', bought:false, date:1700000003 },
+  { id:1004, name:'Beige Trousers — ZARA', price:3299, link:'https://www.zara.com/in/', cat:'Clothing', priority:'high', note:'100% Cotton, neutral versatile pairing', imgUrl:'https://source.unsplash.com/400x300/?beige,trousers,men,cotton', bought:false, date:1700000004 },
+  { id:1005, name:'White Leather Sneakers', price:3500, link:'https://www.myntra.com/adidas-stan-smith', cat:'Footwear', priority:'high', note:'Adidas Stan Smith or ZARA minimalist sneaker', imgUrl:'https://source.unsplash.com/400x300/?white,leather,sneakers,minimal', bought:false, date:1700000005 },
+  { id:1006, name:'Tan Suede Loafers', price:4200, link:'https://www.myntra.com/loafers', cat:'Footwear', priority:'mid', note:'ZARA or Mango, pairs with beige trousers perfectly', imgUrl:'https://source.unsplash.com/400x300/?tan,suede,loafers,men', bought:false, date:1700000006 },
+  { id:1007, name:'White / Beige Slides', price:1499, link:'https://www.myntra.com/slides', cat:'Footwear', priority:'low', note:'H&M leather slide or ZARA flat sandal', imgUrl:'https://source.unsplash.com/400x300/?white,slides,sandal,minimal', bought:false, date:1700000007 },
+  { id:1008, name:'Unstructured Linen Blazer', price:3500, link:'https://www.myntra.com/blazers/hm', cat:'Clothing', priority:'mid', note:'Beige or off-white, H&M or ZARA, breathable for summer', imgUrl:'https://source.unsplash.com/400x300/?linen,blazer,beige,men', bought:false, date:1700000008 },
+  { id:1009, name:'Lightweight Overshirt — Grey / Stone', price:2000, link:'https://www.myntra.com/overshirt', cat:'Clothing', priority:'mid', note:'H&M lyocell overshirt or ZARA fluid shirt-jacket', imgUrl:'https://source.unsplash.com/400x300/?overshirt,grey,men,casual', bought:false, date:1700000009 },
+  { id:1010, name:'Canvas Tote Bag — Natural / Cream', price:850, link:'https://www.myntra.com/tote-bags', cat:'Accessories', priority:'low', note:'Functional, editorial, matches every piece', imgUrl:'https://source.unsplash.com/400x300/?canvas,tote,bag,natural', bought:false, date:1700000010 },
+  { id:1011, name:'Simple Leather Belt — Tan / Cognac', price:1200, link:'https://www.myntra.com/belts', cat:'Accessories', priority:'mid', note:'Only accent needed when tucking shirts into trousers', imgUrl:'https://source.unsplash.com/400x300/?leather,belt,tan,minimal', bought:false, date:1700000011 },
+  { id:1012, name:'Minimal Silver / Gold Watch', price:4500, link:'https://www.myntra.com/watches', cat:'Accessories', priority:'mid', note:'One metal, worn consistently — anchors the whole aesthetic', imgUrl:'https://source.unsplash.com/400x300/?minimal,watch,silver,elegant', bought:false, date:1700000012 },
+];
+
+const stored = localStorage.getItem('shoplist_v3');
+let items = stored ? JSON.parse(stored) : DEFAULT_ITEMS;
 let currentFilter = 'All';
 let currentSort   = 'date';
 let formOpen = false;
