@@ -3,179 +3,251 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>My Shopping Catalog</title>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Mulish:wght@300;400;500;600&display=swap" rel="stylesheet">
+<title>My ShopList</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --bg:#f5f3ef;
-  --surface:#ffffff;
-  --border:#e4e0d8;
-  --ink:#1c1a17;
-  --muted:#9a9285;
-  --muted2:#c8c2b8;
-  --accent:#d4420a;
-  --accent2:#f5a623;
-  --green:#2a7a4b;
-  --green-bg:#edf7f1;
-  --green-text:#2a7a4b;
-  --sidebar-bg:#1c1a17;
-  --sidebar-text:#f5f3ef;
-  --sidebar-muted:#6b6560;
-  --sidebar-active:#d4420a;
+  --bg:#0e0e0e;
+  --surface:#161616;
+  --surface2:#1e1e1e;
+  --surface3:#262626;
+  --border:#2a2a2a;
+  --border2:#383838;
+  --ink:#f0ece4;
+  --ink2:#b8b0a4;
+  --ink3:#6a6460;
+  --accent:#e8a020;
+  --accent2:#d45a20;
+  --green:#28a060;
+  --green-bg:#0e2018;
+  --red:#c03838;
+  --red-bg:#200e0e;
+  --blue:#3878d8;
+  --blue-bg:#0e1830;
+  --sidebar-w:260px;
+  --r:10px;
+  --r-lg:16px;
 }
-body{background:var(--bg);color:var(--ink);font-family:'Mulish',sans-serif;min-height:100vh}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:'Plus Jakarta Sans',sans-serif;min-height:100vh;font-size:13px;line-height:1.5}
 
-.app{display:grid;grid-template-columns:240px 1fr;min-height:100vh}
+/* LAYOUT */
+.app{display:grid;grid-template-columns:var(--sidebar-w) 1fr;min-height:100vh}
 
 /* SIDEBAR */
-.sidebar{background:var(--sidebar-bg);color:var(--sidebar-text);display:flex;flex-direction:column;position:sticky;top:0;height:100vh;overflow-y:auto}
-.sidebar-logo{padding:28px 24px 20px;border-bottom:1px solid #2e2c28}
-.logo-eyebrow{font-size:9px;letter-spacing:0.22em;text-transform:uppercase;color:var(--sidebar-muted);margin-bottom:6px}
-.logo-name{font-family:'Bebas Neue',sans-serif;font-size:30px;letter-spacing:0.04em;color:var(--sidebar-text);line-height:1}
-.logo-name em{color:var(--accent);font-style:normal}
+.sidebar{background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;position:sticky;top:0;height:100vh;overflow-y:auto;overflow-x:hidden}
+.sidebar::-webkit-scrollbar{width:3px}
+.sidebar::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
 
-.budget-panel{margin:16px 14px;background:#252320;border-radius:10px;padding:14px 16px}
-.bp-label{font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--sidebar-muted);margin-bottom:6px}
-.bp-val{font-family:'Bebas Neue',sans-serif;font-size:32px;color:var(--accent2);line-height:1}
-.bp-row{display:flex;justify-content:space-between;margin-top:6px;font-size:11px;color:var(--sidebar-muted)}
-.bp-track{height:3px;background:#3a3730;border-radius:2px;margin-top:10px}
-.bp-fill{height:3px;background:var(--accent2);border-radius:2px;transition:width .5s ease}
+.s-header{padding:24px 20px 18px;border-bottom:1px solid var(--border)}
+.s-eyebrow{font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--ink3);margin-bottom:6px}
+.s-brand{font-family:'Playfair Display',serif;font-size:26px;color:var(--ink);line-height:1;font-weight:700}
+.s-brand em{color:var(--accent);font-style:italic}
 
-.nav-section{padding:16px 0 4px}
-.nav-heading{font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:var(--sidebar-muted);padding:0 24px 8px}
-.nav-item{display:flex;align-items:center;gap:10px;padding:9px 24px;cursor:pointer;border:none;background:none;width:100%;text-align:left;color:var(--sidebar-muted);font-family:'Mulish',sans-serif;font-size:13px;transition:color .15s,background .15s;position:relative}
-.nav-item:hover{background:#252320;color:var(--sidebar-text)}
-.nav-item.active{color:var(--sidebar-text);background:#252320}
-.nav-item.active::after{content:'';position:absolute;right:0;top:0;bottom:0;width:3px;background:var(--accent);border-radius:2px 0 0 2px}
-.nav-icon{width:22px;text-align:center;font-size:15px;flex-shrink:0}
-.nav-label{flex:1}
-.nav-count{font-size:10px;background:#3a3730;color:var(--sidebar-muted);border-radius:20px;padding:2px 8px;font-family:'Bebas Neue',sans-serif;letter-spacing:0.05em}
-.nav-item.active .nav-count{background:var(--accent);color:#fff}
+.s-stats{padding:14px 16px;margin:12px;background:var(--surface2);border-radius:var(--r);border:1px solid var(--border)}
+.s-stat-lbl{font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink3);margin-bottom:6px}
+.s-stat-val{font-family:'Playfair Display',serif;font-size:28px;color:var(--accent);line-height:1}
+.s-stat-sub{display:flex;justify-content:space-between;margin-top:6px;font-size:10px;color:var(--ink3)}
+.s-progress{height:2px;background:var(--border);border-radius:1px;margin-top:10px;overflow:hidden}
+.s-progress-fill{height:2px;background:var(--accent);border-radius:1px;transition:width .5s ease}
+
+.s-nav{padding:10px 0 6px}
+.s-nav-lbl{font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:var(--ink3);padding:4px 20px 8px}
+.s-nav-btn{display:flex;align-items:center;gap:9px;padding:8px 20px;cursor:pointer;border:none;background:none;width:100%;text-align:left;color:var(--ink3);font-family:'Plus Jakarta Sans',sans-serif;font-size:12px;transition:all .15s;position:relative;border-left:2px solid transparent}
+.s-nav-btn:hover{background:var(--surface2);color:var(--ink)}
+.s-nav-btn.active{background:var(--surface2);color:var(--ink);border-left-color:var(--accent)}
+.s-nav-icon{font-size:13px;width:18px;text-align:center;flex-shrink:0}
+.s-nav-lbl-text{flex:1}
+.s-nav-count{font-size:10px;background:var(--surface3);color:var(--ink3);border-radius:20px;padding:1px 7px;min-width:18px;text-align:center;transition:all .15s}
+.s-nav-btn.active .s-nav-count{background:var(--accent);color:#000;font-weight:600}
+
+/* ADD ITEM BUTTON */
+.s-add-area{padding:12px 16px;border-top:1px solid var(--border);margin-top:auto}
+.s-add-btn{width:100%;padding:10px;background:var(--accent);color:#000;border:none;border-radius:var(--r);font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all .15s;letter-spacing:0.01em}
+.s-add-btn:hover{background:#f0a828;transform:translateY(-1px)}
+.s-add-btn:active{transform:scale(0.98)}
 
 /* MAIN */
-.main{display:flex;flex-direction:column;min-height:100vh}
+.main{display:flex;flex-direction:column;min-height:100vh;overflow:hidden}
 
-/* TOP BAR */
-.topbar{background:var(--surface);border-bottom:1px solid var(--border);padding:16px 32px;display:flex;align-items:center;gap:16px;position:sticky;top:0;z-index:10}
-.page-heading{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:0.04em;color:var(--ink);flex:1}
-.page-heading span{color:var(--accent)}
-.sort-group{display:flex;gap:6px}
-.sort-pill{background:none;border:1px solid var(--border);border-radius:20px;padding:5px 14px;font-size:11px;font-family:'Mulish',sans-serif;color:var(--muted);cursor:pointer;transition:all .15s;white-space:nowrap}
-.sort-pill:hover{border-color:var(--muted2);color:var(--ink)}
-.sort-pill.active{background:var(--ink);color:#fff;border-color:var(--ink)}
+/* TOPBAR */
+.topbar{background:var(--surface);border-bottom:1px solid var(--border);padding:12px 28px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:30}
+.tb-title{font-family:'Playfair Display',serif;font-size:22px;color:var(--ink);flex:1;line-height:1}
+.tb-title em{color:var(--accent);font-style:italic}
+.tb-search{display:flex;align-items:center;gap:8px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);padding:7px 12px;flex:0 0 220px}
+.tb-search input{background:none;border:none;outline:none;color:var(--ink);font-family:'Plus Jakarta Sans',sans-serif;font-size:12px;width:100%}
+.tb-search input::placeholder{color:var(--ink3)}
+.tb-search-icon{color:var(--ink3);font-size:12px;flex-shrink:0}
+.sort-row{display:flex;gap:4px}
+.sort-chip{background:none;border:1px solid var(--border);border-radius:20px;padding:4px 12px;font-size:11px;font-family:'Plus Jakarta Sans',sans-serif;color:var(--ink3);cursor:pointer;transition:all .15s;white-space:nowrap}
+.sort-chip:hover{border-color:var(--border2);color:var(--ink)}
+.sort-chip.active{background:var(--ink);color:var(--bg);border-color:var(--ink)}
 
-/* ADD FORM */
-.form-panel{background:var(--surface);border-bottom:1px solid var(--border);padding:20px 32px}
-.form-toggle{display:flex;align-items:center;gap:10px;cursor:pointer;font-size:13px;font-weight:600;color:var(--accent);letter-spacing:0.04em;user-select:none}
-.form-toggle .toggle-icon{width:28px;height:28px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;transition:transform .2s}
-.form-toggle.open .toggle-icon{transform:rotate(45deg)}
-.form-body{display:none;margin-top:18px;animation:fadeSlide .2s ease}
-.form-body.open{display:block}
-@keyframes fadeSlide{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
-.form-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:12px;align-items:end}
-.form-col{display:flex;flex-direction:column;gap:5px}
-.form-col.full{grid-column:1/-1}
-.f-label{font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);font-weight:600}
-input[type=text],input[type=url],input[type=number],select{
-  background:var(--bg);border:1.5px solid var(--border);border-radius:8px;
-  padding:9px 12px;font-family:'Mulish',sans-serif;font-size:13px;color:var(--ink);
-  outline:none;transition:border-color .2s;width:100%
-}
-input:focus,select:focus{border-color:var(--accent)}
-input::placeholder{color:var(--muted2)}
-select option{background:#fff}
-.price-inp{position:relative}
-.price-inp::before{content:'₹';position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:13px;pointer-events:none}
-.price-inp input{padding-left:24px}
-.form-actions-row{display:flex;gap:8px;margin-top:14px;justify-content:flex-end}
-.btn-primary{background:var(--accent);color:#fff;border:none;border-radius:8px;padding:10px 24px;font-family:'Mulish',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:all .15s;letter-spacing:0.03em}
-.btn-primary:hover{background:#c03a08;transform:translateY(-1px)}
-.btn-secondary{background:none;border:1.5px solid var(--border);color:var(--muted);border-radius:8px;padding:10px 16px;font-family:'Mulish',sans-serif;font-size:13px;cursor:pointer;transition:all .15s}
-.btn-secondary:hover{border-color:var(--muted2);color:var(--ink)}
+/* STATS BAR */
+.stats-bar{display:grid;grid-template-columns:repeat(4,1fr);border-bottom:1px solid var(--border);background:var(--surface)}
+.stat-cell{padding:12px 20px;border-right:1px solid var(--border)}
+.stat-cell:last-child{border-right:none}
+.stat-n{font-family:'Playfair Display',serif;font-size:22px;line-height:1;color:var(--ink)}
+.stat-n.c-accent{color:var(--accent)}
+.stat-n.c-green{color:var(--green)}
+.stat-n.c-gold{color:var(--accent)}
+.stat-lbl{font-size:9px;letter-spacing:0.08em;text-transform:uppercase;color:var(--ink3);margin-top:3px}
 
-/* STATS */
-.stats-bar{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);border-bottom:1px solid var(--border)}
-.stat-cell{background:var(--surface);padding:14px 24px}
-.stat-n{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:0.04em;line-height:1}
-.stat-n.orange{color:var(--accent)}
-.stat-n.green{color:var(--green)}
-.stat-lbl{font-size:10px;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin-top:2px}
-
-/* CATALOG GRID */
-.catalog{padding:24px 32px 60px;flex:1}
-.cat-section{margin-bottom:40px}
-.cat-section-title{display:flex;align-items:center;gap:12px;margin-bottom:16px}
-.cat-section-name{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:0.06em;color:var(--ink)}
+/* CATALOG */
+.catalog-wrap{padding:24px 28px 80px;flex:1}
+.cat-section{margin-bottom:36px}
+.cat-section-head{display:flex;align-items:center;gap:10px;margin-bottom:14px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.cat-section-icon{font-size:16px}
+.cat-section-name{font-family:'Playfair Display',serif;font-size:18px;color:var(--ink)}
 .cat-section-line{flex:1;height:1px;background:var(--border)}
-.cat-section-count{font-size:11px;color:var(--muted);letter-spacing:0.08em}
-
-.cards-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:16px}
+.cat-section-meta{font-size:10px;color:var(--ink3)}
+.cat-section-val{font-size:11px;color:var(--accent);font-weight:600}
+.cards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(195px,1fr));gap:12px}
 
 /* PRODUCT CARD */
-.pcard{background:var(--surface);border:1.5px solid var(--border);border-radius:14px;overflow:hidden;transition:transform .2s,box-shadow .2s,border-color .2s;animation:cardIn .25s ease;cursor:default;position:relative}
-@keyframes cardIn{from{opacity:0;transform:translateY(10px) scale(0.97)}to{opacity:1;transform:none}}
-.pcard:hover{transform:translateY(-4px);box-shadow:0 12px 40px rgba(0,0,0,0.1);border-color:var(--muted2)}
-.pcard.bought{border-color:#b8dfc8;background:#fafffe}
+.pcard{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);overflow:hidden;transition:transform .2s,border-color .2s;animation:cardIn .2s ease;position:relative;display:flex;flex-direction:column;cursor:default}
+@keyframes cardIn{from{opacity:0;transform:translateY(8px) scale(0.97)}to{opacity:1;transform:none}}
+.pcard:hover{transform:translateY(-3px);border-color:var(--border2)}
+.pcard.is-bought{border-color:#1a3028;background:#111a16}
 
-/* Image */
-.pcard-img{position:relative;height:180px;background:#f0ede6;overflow:hidden}
-.pcard-img img{width:100%;height:100%;object-fit:cover;transition:transform .4s ease;display:block}
-.pcard:hover .pcard-img img{transform:scale(1.05)}
-.pcard-img .img-placeholder{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;color:var(--muted2)}
-.pcard-img .img-placeholder .ph-icon{font-size:36px;opacity:0.4}
-.pcard-img .img-placeholder .ph-text{font-size:10px;letter-spacing:0.1em;text-transform:uppercase}
-.img-loading{position:absolute;inset:0;background:#f0ede6;display:flex;align-items:center;justify-content:center}
-.spinner{width:24px;height:24px;border:2px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
+.pcard-img-wrap{position:relative;height:185px;background:var(--surface2);overflow:hidden;flex-shrink:0}
+.pcard-img-wrap img{width:100%;height:100%;object-fit:cover;transition:transform .4s ease,opacity .3s;display:block}
+.pcard:hover .pcard-img-wrap img{transform:scale(1.05)}
+.pcard-img-placeholder{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px}
+.pip-icon{font-size:36px;opacity:0.2}
+.pip-text{font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink3)}
 
-/* Priority ribbon */
-.priority-ribbon{position:absolute;top:10px;left:10px;font-size:9px;letter-spacing:0.1em;text-transform:uppercase;font-weight:700;padding:3px 8px;border-radius:20px}
-.pr-high{background:#fde8e2;color:#c0300a}
-.pr-mid{background:#fef3d8;color:#9a6a00}
-.pr-low{background:#e8f5ee;color:#2a7a4b}
+/* upload area in card (when no image) */
+.pcard-upload-zone{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;opacity:0;transition:opacity .2s;background:rgba(14,14,14,0.85);cursor:pointer}
+.pcard:hover .pcard-upload-zone{opacity:1}
+.puz-icon{font-size:22px;color:var(--accent)}
+.puz-text{font-size:11px;color:var(--ink2);text-align:center;line-height:1.4}
+.pcard-file-input{display:none}
 
-.bought-ribbon{position:absolute;top:10px;right:10px;background:var(--green);color:#fff;font-size:9px;letter-spacing:0.1em;text-transform:uppercase;font-weight:700;padding:3px 8px;border-radius:20px}
+.pcard-badges{position:absolute;top:8px;left:8px;right:8px;display:flex;justify-content:space-between;pointer-events:none}
+.badge{font-size:9px;letter-spacing:0.08em;text-transform:uppercase;font-weight:600;padding:3px 8px;border-radius:20px}
+.b-high{background:rgba(200,60,30,0.9);color:#ffd0c0}
+.b-mid{background:rgba(200,150,20,0.9);color:#fff0b0}
+.b-low{background:rgba(30,150,80,0.9);color:#b0ffd0}
+.b-bought{background:rgba(30,140,70,0.9);color:#b0ffd0}
 
-/* Card body */
-.pcard-body{padding:12px 14px 14px}
-.pcard-cat{font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);margin-bottom:5px;font-weight:600}
-.pcard-name{font-size:14px;font-weight:600;color:var(--ink);line-height:1.3;margin-bottom:4px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.pcard.bought .pcard-name{text-decoration:line-through;color:var(--muted)}
-.pcard-note{font-size:11px;color:var(--muted);margin-bottom:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+/* hover overlay */
+.pcard-overlay{position:absolute;inset:0;background:rgba(0,0,0,0.6);display:flex;align-items:center;justify-content:center;gap:8px;opacity:0;transition:opacity .18s}
+.pcard:hover .pcard-overlay{opacity:1}
+.ov-btn{width:36px;height:36px;border-radius:50%;border:1.5px solid rgba(255,255,255,0.5);background:rgba(255,255,255,0.1);color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;transition:all .15s}
+.ov-btn:hover{background:rgba(255,255,255,0.9);color:#000;border-color:#fff;transform:scale(1.1)}
+.ov-edit:hover{background:var(--accent)!important;color:#000!important;border-color:var(--accent)!important}
+.ov-buy:hover{background:var(--green)!important;color:#fff!important;border-color:var(--green)!important}
+.ov-del:hover{background:var(--red)!important;color:#fff!important;border-color:var(--red)!important}
 
-.pcard-footer{display:flex;align-items:center;justify-content:space-between;gap:6px}
-.pcard-price{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:0.04em;color:var(--accent)}
-.pcard.bought .pcard-price{color:var(--green)}
+.pcard-body{padding:11px 13px 13px;display:flex;flex-direction:column;gap:4px;flex:1}
+.pcard-cat{font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink3);font-weight:600}
+.pcard-name{font-size:13px;font-weight:600;color:var(--ink);line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.pcard.is-bought .pcard-name{text-decoration:line-through;color:var(--ink3)}
+.pcard-note{font-size:11px;color:var(--ink3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pcard-footer{display:flex;align-items:center;justify-content:space-between;margin-top:auto;padding-top:8px;gap:6px}
+.pcard-price{font-family:'Playfair Display',serif;font-size:18px;color:var(--accent);line-height:1}
+.pcard.is-bought .pcard-price{color:var(--green)}
+.pcard-link{font-size:10px;color:var(--ink3);text-decoration:none;border:1px solid var(--border);border-radius:6px;padding:3px 8px;transition:all .15s;white-space:nowrap}
+.pcard-link:hover{border-color:var(--accent);color:var(--accent)}
 
-.pcard-actions{display:flex;gap:5px}
-.pa-btn{width:30px;height:30px;border-radius:8px;border:1.5px solid var(--border);background:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:13px;color:var(--muted);transition:all .15s;flex-shrink:0}
-.pa-btn:hover{border-color:var(--muted2);color:var(--ink)}
-.pa-btn.buy:hover{background:var(--green-bg);border-color:var(--green);color:var(--green)}
-.pa-btn.del:hover{background:#fde8e2;border-color:#e88080;color:var(--accent)}
-.pa-btn.img-refresh:hover{background:#eef2ff;border-color:#8080d0;color:#5050b0}
-.pa-link{width:30px;height:30px;border-radius:8px;border:1.5px solid var(--border);background:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:13px;color:var(--muted);transition:all .15s;text-decoration:none;flex-shrink:0}
-.pa-link:hover{border-color:var(--accent);color:var(--accent)}
-
-.empty-state{text-align:center;padding:80px 20px;color:var(--muted)}
-.es-icon{font-size:56px;margin-bottom:16px;opacity:0.25}
-.es-title{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:0.06em;color:var(--muted2);margin-bottom:6px}
+/* EMPTY STATE */
+.empty-state{text-align:center;padding:80px 20px;color:var(--ink3)}
+.es-icon{font-size:48px;margin-bottom:14px;opacity:0.15}
+.es-title{font-family:'Playfair Display',serif;font-size:22px;color:var(--ink2);margin-bottom:6px}
 .es-sub{font-size:13px}
 
-@media(max-width:900px){
+/* MODAL OVERLAY */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:100;display:flex;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(6px);animation:fadein .18s ease}
+.modal-overlay.hidden{display:none!important}
+@keyframes fadein{from{opacity:0}to{opacity:1}}
+
+/* ADD / EDIT MODAL */
+.modal{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);width:100%;max-width:580px;max-height:92vh;overflow-y:auto;animation:modalUp .22s ease;box-shadow:0 24px 80px rgba(0,0,0,0.6)}
+@keyframes modalUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+.modal::-webkit-scrollbar{width:3px}
+.modal::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
+
+.modal-hdr{padding:18px 22px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--surface);z-index:1}
+.modal-title{font-family:'Playfair Display',serif;font-size:20px;color:var(--ink)}
+.modal-close{width:30px;height:30px;border-radius:50%;border:1px solid var(--border);background:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--ink3);transition:all .15s}
+.modal-close:hover{border-color:var(--red);color:var(--red)}
+.modal-body{padding:18px 22px}
+
+/* Image upload section inside modal */
+.img-upload-section{margin-bottom:18px}
+.img-preview-box{width:100%;height:200px;border-radius:var(--r);overflow:hidden;background:var(--surface2);border:1.5px dashed var(--border2);display:flex;align-items:center;justify-content:center;margin-bottom:10px;position:relative;transition:border-color .2s;cursor:pointer}
+.img-preview-box:hover{border-color:var(--accent)}
+.img-preview-box.has-img{border-style:solid;border-color:var(--green)}
+.img-preview-box img{width:100%;height:100%;object-fit:cover;border-radius:calc(var(--r) - 2px)}
+.ipb-placeholder{display:flex;flex-direction:column;align-items:center;gap:8px;color:var(--ink3);pointer-events:none}
+.ipb-icon{font-size:32px;opacity:0.3}
+.ipb-text{font-size:12px;text-align:center;line-height:1.5}
+.ipb-hint{font-size:10px;color:var(--ink3);margin-top:2px}
+.img-actions{display:flex;gap:8px}
+.img-upload-file-input{display:none}
+.img-tab-btn{flex:1;padding:8px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);color:var(--ink3);font-family:'Plus Jakarta Sans',sans-serif;font-size:11px;cursor:pointer;transition:all .15s;text-align:center}
+.img-tab-btn:hover{border-color:var(--border2);color:var(--ink)}
+.img-tab-btn.active{background:var(--accent);color:#000;border-color:var(--accent);font-weight:600}
+.img-url-row{display:none;margin-top:8px}
+.img-url-row.show{display:flex;gap:8px}
+.img-remove-btn{background:none;border:1px solid var(--red);color:var(--red);border-radius:6px;padding:4px 10px;font-size:11px;cursor:pointer;white-space:nowrap;transition:all .15s}
+.img-remove-btn:hover{background:var(--red);color:#fff}
+
+/* MODAL FORM */
+.mfg{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.mfc{display:flex;flex-direction:column;gap:4px}
+.mfc.full{grid-column:1/-1}
+.mfc-lbl{font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink3);font-weight:600}
+input[type=text],input[type=url],input[type=number],select,textarea{
+  width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:8px;
+  padding:8px 11px;font-family:'Plus Jakarta Sans',sans-serif;font-size:12px;color:var(--ink);
+  outline:none;transition:border-color .2s
+}
+input:focus,select:focus,textarea:focus{border-color:var(--accent)}
+input::placeholder,textarea::placeholder{color:var(--ink3)}
+select option{background:var(--surface2);color:var(--ink)}
+textarea{resize:vertical;min-height:60px}
+.price-wrap{position:relative}
+.price-wrap::before{content:'₹';position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--ink3);font-size:12px;pointer-events:none}
+.price-wrap input{padding-left:22px}
+
+.modal-ftr{padding:14px 22px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;position:sticky;bottom:0;background:var(--surface)}
+.del-btn{background:none;border:none;color:var(--ink3);font-size:11px;font-family:'Plus Jakarta Sans',sans-serif;cursor:pointer;display:flex;align-items:center;gap:5px;padding:6px 0;transition:color .15s}
+.del-btn:hover{color:var(--red)}
+.btn-row{display:flex;gap:7px}
+.btn{border-radius:8px;padding:8px 18px;font-family:'Plus Jakarta Sans',sans-serif;font-size:12px;font-weight:600;cursor:pointer;transition:all .15s;border:1px solid transparent}
+.btn-primary{background:var(--accent);color:#000;border-color:var(--accent)}
+.btn-primary:hover{background:#f0a828;transform:translateY(-1px)}
+.btn-ghost{background:none;border-color:var(--border);color:var(--ink3)}
+.btn-ghost:hover{border-color:var(--border2);color:var(--ink)}
+.btn-sm{padding:5px 13px;font-size:11px;border-radius:6px}
+
+/* TOAST */
+.toast{position:fixed;bottom:22px;right:22px;background:var(--surface2);border:1px solid var(--border);color:var(--ink);padding:10px 18px;border-radius:var(--r);font-size:12px;font-weight:500;z-index:200;transform:translateY(70px);opacity:0;transition:all .3s cubic-bezier(.34,1.56,.64,1);box-shadow:0 8px 32px rgba(0,0,0,0.4);pointer-events:none}
+.toast.show{transform:translateY(0);opacity:1}
+.toast.ok{border-color:var(--green);color:var(--green)}
+.toast.err{border-color:var(--red);color:var(--red)}
+
+/* RESPONSIVE */
+@media(max-width:860px){
   .app{grid-template-columns:1fr}
-  .sidebar{position:static;height:auto;flex-direction:row;flex-wrap:wrap;padding:12px;gap:6px;overflow-x:auto}
-  .sidebar-logo{border:none;padding:4px 10px}
-  .budget-panel{margin:4px;padding:8px 12px;flex-shrink:0}
-  .nav-section{display:contents}
-  .nav-heading{display:none}
-  .nav-item{border-radius:20px;padding:5px 12px;border:1px solid #3a3730}
-  .nav-item.active::after{display:none}
-  .topbar{padding:12px 16px}
-  .form-panel{padding:14px 16px}
-  .catalog{padding:16px 16px 60px}
+  .sidebar{position:static;height:auto;flex-direction:row;flex-wrap:wrap;padding:10px;gap:5px;overflow-x:auto;overflow-y:visible}
+  .s-header{border:none;padding:4px 8px;flex-shrink:0}
+  .s-stats{margin:4px;padding:8px 12px;flex-shrink:0;min-width:150px}
+  .s-nav{display:contents}
+  .s-nav-lbl{display:none}
+  .s-nav-btn{border-left:none;border-radius:20px;padding:5px 12px;border:1px solid var(--border);flex-shrink:0;width:auto}
+  .s-nav-btn.active{border-color:var(--accent)}
+  .s-add-area{padding:4px 8px;border:none;margin-top:0}
+  .s-add-btn{padding:7px 16px;width:auto}
+  .topbar,.catalog-wrap{padding-left:16px;padding-right:16px}
+  .topbar{flex-wrap:wrap;gap:8px}
+  .tb-search{flex:0 0 100%;order:3}
   .stats-bar{grid-template-columns:repeat(2,1fr)}
-  .form-grid{grid-template-columns:1fr 1fr}
+  .cards-grid{grid-template-columns:repeat(auto-fill,minmax(165px,1fr));gap:10px}
+  .pcard-img-wrap{height:155px}
 }
 </style>
 </head>
@@ -184,427 +256,464 @@ select option{background:#fff}
 
 <!-- SIDEBAR -->
 <aside class="sidebar">
-  <div class="sidebar-logo">
-    <div class="logo-eyebrow">My personal</div>
-    <div class="logo-name">SHOP<em>LIST</em></div>
+  <div class="s-header">
+    <div class="s-eyebrow">My personal</div>
+    <div class="s-brand">Shop<em>List</em></div>
   </div>
 
-  <div class="budget-panel">
-    <div class="bp-label">Total catalog value</div>
-    <div class="bp-val" id="bp-val">₹0</div>
-    <div class="bp-row"><span id="bp-spent">₹0 spent</span><span id="bp-pct">0%</span></div>
-    <div class="bp-track"><div class="bp-fill" id="bp-fill" style="width:0%"></div></div>
+  <div class="s-stats">
+    <div class="s-stat-lbl">Total catalog value</div>
+    <div class="s-stat-val" id="sb-val">₹0</div>
+    <div class="s-stat-sub"><span id="sb-spent">₹0 spent</span><span id="sb-pct">0%</span></div>
+    <div class="s-progress"><div class="s-progress-fill" id="sb-bar" style="width:0%"></div></div>
   </div>
 
-  <div class="nav-section">
-    <div class="nav-heading">View</div>
-    <button class="nav-item active" onclick="setFilter('All',this)">
-      <span class="nav-icon">▦</span><span class="nav-label">All Items</span><span class="nav-count" id="nc-All">0</span>
-    </button>
-    <button class="nav-item" onclick="setFilter('Pending',this)">
-      <span class="nav-icon">◯</span><span class="nav-label">Pending</span><span class="nav-count" id="nc-Pending">0</span>
-    </button>
-    <button class="nav-item" onclick="setFilter('Bought',this)">
-      <span class="nav-icon">✓</span><span class="nav-label">Bought</span><span class="nav-count" id="nc-Bought">0</span>
-    </button>
+  <div class="s-nav">
+    <div class="s-nav-lbl">Views</div>
+    <button class="s-nav-btn active" onclick="setFilter('All',this)"><span class="s-nav-icon">▦</span><span class="s-nav-lbl-text">All Items</span><span class="s-nav-count" id="nc-All">0</span></button>
+    <button class="s-nav-btn" onclick="setFilter('Pending',this)"><span class="s-nav-icon">○</span><span class="s-nav-lbl-text">Pending</span><span class="s-nav-count" id="nc-Pending">0</span></button>
+    <button class="s-nav-btn" onclick="setFilter('Bought',this)"><span class="s-nav-icon">✓</span><span class="s-nav-lbl-text">Bought</span><span class="s-nav-count" id="nc-Bought">0</span></button>
+  </div>
+  <div class="s-nav">
+    <div class="s-nav-lbl">Categories</div>
+    <button class="s-nav-btn" onclick="setFilter('Clothing',this)"><span class="s-nav-icon">👕</span><span class="s-nav-lbl-text">Clothing</span><span class="s-nav-count" id="nc-Clothing">0</span></button>
+    <button class="s-nav-btn" onclick="setFilter('Electronics',this)"><span class="s-nav-icon">📱</span><span class="s-nav-lbl-text">Electronics</span><span class="s-nav-count" id="nc-Electronics">0</span></button>
+    <button class="s-nav-btn" onclick="setFilter('Books',this)"><span class="s-nav-icon">📚</span><span class="s-nav-lbl-text">Books</span><span class="s-nav-count" id="nc-Books">0</span></button>
+    <button class="s-nav-btn" onclick="setFilter('Footwear',this)"><span class="s-nav-icon">👟</span><span class="s-nav-lbl-text">Footwear</span><span class="s-nav-count" id="nc-Footwear">0</span></button>
+    <button class="s-nav-btn" onclick="setFilter('Accessories',this)"><span class="s-nav-icon">🎒</span><span class="s-nav-lbl-text">Accessories</span><span class="s-nav-count" id="nc-Accessories">0</span></button>
+    <button class="s-nav-btn" onclick="setFilter('Health',this)"><span class="s-nav-icon">💊</span><span class="s-nav-lbl-text">Health</span><span class="s-nav-count" id="nc-Health">0</span></button>
+    <button class="s-nav-btn" onclick="setFilter('Food',this)"><span class="s-nav-icon">🍜</span><span class="s-nav-lbl-text">Food</span><span class="s-nav-count" id="nc-Food">0</span></button>
+    <button class="s-nav-btn" onclick="setFilter('Appliances',this)"><span class="s-nav-icon">🏠</span><span class="s-nav-lbl-text">Appliances</span><span class="s-nav-count" id="nc-Appliances">0</span></button>
+    <button class="s-nav-btn" onclick="setFilter('Other',this)"><span class="s-nav-icon">⭐</span><span class="s-nav-lbl-text">Other</span><span class="s-nav-count" id="nc-Other">0</span></button>
   </div>
 
-  <div class="nav-section">
-    <div class="nav-heading">Categories</div>
-    <button class="nav-item" onclick="setFilter('Clothing',this)"><span class="nav-icon">👕</span><span class="nav-label">Clothing</span><span class="nav-count" id="nc-Clothing">0</span></button>
-    <button class="nav-item" onclick="setFilter('Electronics',this)"><span class="nav-icon">📱</span><span class="nav-label">Electronics</span><span class="nav-count" id="nc-Electronics">0</span></button>
-    <button class="nav-item" onclick="setFilter('Books',this)"><span class="nav-icon">📚</span><span class="nav-label">Books</span><span class="nav-count" id="nc-Books">0</span></button>
-    <button class="nav-item" onclick="setFilter('Footwear',this)"><span class="nav-icon">👟</span><span class="nav-label">Footwear</span><span class="nav-count" id="nc-Footwear">0</span></button>
-    <button class="nav-item" onclick="setFilter('Accessories',this)"><span class="nav-icon">🎒</span><span class="nav-label">Accessories</span><span class="nav-count" id="nc-Accessories">0</span></button>
-    <button class="nav-item" onclick="setFilter('Health',this)"><span class="nav-icon">💊</span><span class="nav-label">Health</span><span class="nav-count" id="nc-Health">0</span></button>
-    <button class="nav-item" onclick="setFilter('Food',this)"><span class="nav-icon">🍜</span><span class="nav-label">Food</span><span class="nav-count" id="nc-Food">0</span></button>
-    <button class="nav-item" onclick="setFilter('Appliances',this)"><span class="nav-icon">🏠</span><span class="nav-label">Appliances</span><span class="nav-count" id="nc-Appliances">0</span></button>
-    <button class="nav-item" onclick="setFilter('Other',this)"><span class="nav-icon">⭐</span><span class="nav-label">Other</span><span class="nav-count" id="nc-Other">0</span></button>
+  <div class="s-add-area">
+    <button class="s-add-btn" onclick="openAdd()">+ Add new item</button>
   </div>
 </aside>
 
 <!-- MAIN -->
 <div class="main">
-
-  <!-- Topbar -->
   <div class="topbar">
-    <div class="page-heading" id="pg-heading">ALL <span>ITEMS</span></div>
-    <div class="sort-group">
-      <button class="sort-pill active" onclick="setSort('date',this)">Latest</button>
-      <button class="sort-pill" onclick="setSort('price-asc',this)">Price ↑</button>
-      <button class="sort-pill" onclick="setSort('price-desc',this)">Price ↓</button>
-      <button class="sort-pill" onclick="setSort('priority',this)">Priority</button>
+    <div class="tb-title" id="pg-title">All <em>Items</em></div>
+    <div class="tb-search">
+      <span class="tb-search-icon">⌕</span>
+      <input type="text" id="search-input" placeholder="Search items…" oninput="render()">
+    </div>
+    <div class="sort-row">
+      <button class="sort-chip active" onclick="setSort('date',this)">Latest</button>
+      <button class="sort-chip" onclick="setSort('price-asc',this)">Price ↑</button>
+      <button class="sort-chip" onclick="setSort('price-desc',this)">Price ↓</button>
+      <button class="sort-chip" onclick="setSort('priority',this)">Priority</button>
     </div>
   </div>
 
-  <!-- Add form -->
-  <div class="form-panel">
-    <div class="form-toggle" id="form-toggle" onclick="toggleForm()">
-      <div class="toggle-icon">+</div>
-      <span>Add new item to catalog</span>
+  <div class="stats-bar">
+    <div class="stat-cell"><div class="stat-n c-accent" id="st-total">0</div><div class="stat-lbl">Items</div></div>
+    <div class="stat-cell"><div class="stat-n c-green" id="st-bought">0</div><div class="stat-lbl">Bought</div></div>
+    <div class="stat-cell"><div class="stat-n c-gold" id="st-value">₹0</div><div class="stat-lbl">Total value</div></div>
+    <div class="stat-cell"><div class="stat-n" id="st-spent">₹0</div><div class="stat-lbl">Spent</div></div>
+  </div>
+
+  <div class="catalog-wrap" id="catalog-wrap"></div>
+</div>
+</div>
+
+<!-- ADD / EDIT MODAL -->
+<div class="modal-overlay hidden" id="modal-overlay" onclick="bgClose(event)">
+  <div class="modal" id="modal">
+    <div class="modal-hdr">
+      <div class="modal-title" id="modal-title">Add new item</div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
     </div>
-    <div class="form-body" id="form-body">
-      <div class="form-grid">
-        <div class="form-col">
-          <div class="f-label">Item name *</div>
-          <input type="text" id="f-name" placeholder="e.g. Nike Air Max, OnePlus 12, Levi's 511…" />
+    <div class="modal-body">
+
+      <!-- IMAGE UPLOAD -->
+      <div class="img-upload-section">
+        <div class="img-preview-box" id="img-preview-box" onclick="triggerImgClick()">
+          <div class="ipb-placeholder" id="ipb-placeholder">
+            <div class="ipb-icon">🖼</div>
+            <div class="ipb-text">Click to upload image<br>or paste a URL below</div>
+            <div class="ipb-hint">JPG, PNG, WEBP — from your device or internet</div>
+          </div>
         </div>
-        <div class="form-col">
-          <div class="f-label">Category</div>
-          <select id="f-cat">
+        <input type="file" id="img-file-input" class="img-upload-file-input" accept="image/*" onchange="handleFileUpload(this)">
+        <div class="img-actions">
+          <button class="img-tab-btn active" id="tab-upload" onclick="switchImgTab('upload')">📁 Upload from device</button>
+          <button class="img-tab-btn" id="tab-url" onclick="switchImgTab('url')">🔗 Paste image URL</button>
+          <button class="img-remove-btn" id="img-remove-btn" onclick="removeImage()" style="display:none">Remove</button>
+        </div>
+        <div class="img-url-row" id="img-url-row">
+          <input type="url" id="m-img-url" placeholder="https://… paste image address" oninput="previewFromUrl(this.value)" style="flex:1">
+        </div>
+      </div>
+
+      <!-- FORM FIELDS -->
+      <div class="mfg">
+        <div class="mfc full"><div class="mfc-lbl">Item name *</div><input type="text" id="m-name" placeholder="e.g. Nike Air Max 90, OnePlus 12…" /></div>
+        <div class="mfc"><div class="mfc-lbl">Category</div>
+          <select id="m-cat">
             <option>Clothing</option><option>Electronics</option><option>Books</option>
             <option>Footwear</option><option>Accessories</option><option>Health</option>
             <option>Food</option><option>Appliances</option><option>Other</option>
           </select>
         </div>
-        <div class="form-col">
-          <div class="f-label">Price (₹)</div>
-          <div class="price-inp"><input type="number" id="f-price" placeholder="0" min="0" /></div>
-        </div>
-        <div class="form-col">
-          <div class="f-label">Priority</div>
-          <select id="f-priority">
+        <div class="mfc"><div class="mfc-lbl">Priority</div>
+          <select id="m-priority">
             <option value="high">🔴 Must have</option>
             <option value="mid" selected>🟡 Want it</option>
             <option value="low">🟢 Someday</option>
           </select>
         </div>
-        <div class="form-col" style="grid-column:1/3">
-          <div class="f-label">Buy link (Myntra / Amazon / Flipkart)</div>
-          <input type="url" id="f-link" placeholder="https://…" />
+        <div class="mfc"><div class="mfc-lbl">Price (₹)</div><div class="price-wrap"><input type="number" id="m-price" placeholder="0" min="0"></div></div>
+        <div class="mfc"><div class="mfc-lbl">Status</div>
+          <select id="m-bought">
+            <option value="false">○ Pending</option>
+            <option value="true">✓ Bought</option>
+          </select>
         </div>
-        <div class="form-col">
-          <div class="f-label">Note (size, color…)</div>
-          <input type="text" id="f-note" placeholder="e.g. Size 32, Olive green" />
-        </div>
-        <div class="form-col">
-          <div class="f-label">Custom image URL (optional)</div>
-          <input type="url" id="f-img" placeholder="Leave blank for auto image" />
-        </div>
+        <div class="mfc full"><div class="mfc-lbl">Buy link (Myntra / Amazon / Flipkart)</div><input type="url" id="m-link" placeholder="https://…"></div>
+        <div class="mfc full"><div class="mfc-lbl">Note (size, color, variant…)</div><textarea id="m-note" placeholder="e.g. Size 32, Olive green, from Myntra sale"></textarea></div>
       </div>
-      <div class="form-actions-row">
-        <button class="btn-secondary" onclick="clearForm()">Clear</button>
-        <button class="btn-primary" onclick="addItem()">+ Add to Catalog</button>
+    </div>
+    <div class="modal-ftr">
+      <button class="del-btn" id="modal-del-btn" onclick="deleteFromModal()" style="display:none">🗑 Remove item</button>
+      <div style="flex:1"></div>
+      <div class="btn-row">
+        <button class="btn btn-ghost btn-sm" onclick="closeModal()">Cancel</button>
+        <button class="btn btn-primary btn-sm" id="modal-save-btn" onclick="saveModal()">Add item</button>
       </div>
     </div>
   </div>
-
-  <!-- Stats -->
-  <div class="stats-bar">
-    <div class="stat-cell"><div class="stat-n orange" id="st-total">0</div><div class="stat-lbl">Items</div></div>
-    <div class="stat-cell"><div class="stat-n green" id="st-bought">0</div><div class="stat-lbl">Bought</div></div>
-    <div class="stat-cell"><div class="stat-n orange" id="st-value">₹0</div><div class="stat-lbl">Total value</div></div>
-    <div class="stat-cell"><div class="stat-n" id="st-spent">₹0</div><div class="stat-lbl">Spent</div></div>
-  </div>
-
-  <!-- Catalog -->
-  <div class="catalog" id="catalog"></div>
 </div>
-</div>
+
+<div class="toast" id="toast"></div>
 
 <script>
-const CATS = ['Clothing','Electronics','Books','Footwear','Accessories','Health','Food','Appliances','Other'];
-const CAT_ICONS = {Clothing:'👕',Electronics:'📱',Books:'📚',Footwear:'👟',Accessories:'🎒',Health:'💊',Food:'🍜',Appliances:'🏠',Other:'⭐'};
+const CATS=['Clothing','Electronics','Books','Footwear','Accessories','Health','Food','Appliances','Other'];
+const ICONS={Clothing:'👕',Electronics:'📱',Books:'📚',Footwear:'👟',Accessories:'🎒',Health:'💊',Food:'🍜',Appliances:'🏠',Other:'⭐'};
+const PL={high:'Must have',mid:'Want it',low:'Someday'};
+const PC={high:'b-high',mid:'b-mid',low:'b-low'};
 
-// ─── AI IMAGE GENERATION ────────────────────────────────────────────────────
-// Uses Claude API to craft a precise image generation prompt from the item
-// title + note, then generates a real product-like image via Pollinations.ai
-// (free, no API key needed, works from any domain including GitHub Pages)
-
-async function buildImagePrompt(name, note, cat) {
-  try {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 120,
-        messages: [{
-          role: 'user',
-          content: `Write a short, precise image generation prompt (max 20 words) for this product:
-Name: ${name}
-Note: ${note || 'none'}
-Category: ${cat}
-
-Rules:
-- Describe the exact product visually (color, material, style, shape)
-- End with: "product photo, white background, studio lighting, photorealistic"
-- Return ONLY the prompt text, nothing else`
-        }]
-      })
-    });
-    const data = await res.json();
-    const prompt = data.content?.[0]?.text?.trim();
-    if (prompt && prompt.length > 5) return prompt;
-  } catch(e) {
-    console.warn('Prompt generation failed:', e);
-  }
-  // Fallback: build prompt directly from name + note
-  return `${name} ${note || ''} ${cat}, product photo, white background, studio lighting, photorealistic`;
-}
-
-function buildPollinationsUrl(prompt) {
-  const encoded = encodeURIComponent(prompt);
-  return `https://image.pollinations.ai/prompt/${encoded}?width=400&height=300&nologo=true&model=flux&seed=${Math.floor(Math.random()*99999)}`;
-}
-
-async function getSmartImage(name, note, cat, customImg) {
-  if (customImg) return customImg;
-  // Use curated image for known default capsule items
-  if (CURATED_IMAGES[name]) return CURATED_IMAGES[name];
-  // Build AI prompt then generate image
-  const prompt = await buildImagePrompt(name, note, cat);
-  return buildPollinationsUrl(prompt);
-}
-
-async function refreshImage(id) {
-  const it = items.find(i => i.id === id);
-  if (!it) return;
-  const loadEl = document.querySelector(`#pc-${it.id} .img-loading`);
-  const imgEl  = document.querySelector(`#pc-${it.id} .pcard-img img`);
-  if (loadEl) loadEl.style.display = 'flex';
-  if (imgEl)  imgEl.style.opacity = '0.2';
-  const prompt = await buildImagePrompt(it.name, it.note, it.cat);
-  it.imgUrl = buildPollinationsUrl(prompt);
-  save(); render();
-}
-
-// Category fallback — also generated via Pollinations
-const CAT_FALLBACK = {
-  Clothing:    buildPollinationsUrl('folded cotton shirt neutral color product photo white background studio lighting photorealistic'),
-  Footwear:    buildPollinationsUrl('clean minimal sneaker side view product photo white background photorealistic'),
-  Electronics: buildPollinationsUrl('modern smartphone gadget product photo white background studio lighting photorealistic'),
-  Books:       buildPollinationsUrl('stack of books hardcover product photo white background photorealistic'),
-  Accessories: buildPollinationsUrl('leather bag accessory product photo white background studio lighting photorealistic'),
-  Health:      buildPollinationsUrl('health wellness product white bottle product photo white background photorealistic'),
-  Food:        buildPollinationsUrl('fresh food ingredients product photo white background studio lighting photorealistic'),
-  Appliances:  buildPollinationsUrl('modern kitchen appliance product photo white background studio lighting photorealistic'),
-  Other:       buildPollinationsUrl('generic product on white background studio lighting photorealistic'),
-};
-
-// Curated high-quality prompts → generated images for default capsule items
-const CURATED_IMAGES = {
-  'Lyocell Shirt — H&M':                  buildPollinationsUrl('mens lyocell shirt fluid drape soft beige minimal product photo white background studio lighting photorealistic'),
-  'Lyocell Shirt — ZARA':                 buildPollinationsUrl('mens ZARA lyocell shirt sharp cut smooth white minimal product photo white background studio lighting photorealistic'),
-  'White Tailored Trousers':              buildPollinationsUrl('mens white tailored cotton trousers flat lay product photo white background studio lighting photorealistic'),
-  'Beige Trousers — ZARA':               buildPollinationsUrl('mens beige cotton ZARA trousers folded product photo white background studio lighting photorealistic'),
-  'White Leather Sneakers':              buildPollinationsUrl('white leather minimal sneakers side view clean product photo white background studio lighting photorealistic'),
-  'Tan Suede Loafers':                   buildPollinationsUrl('tan suede mens loafer shoes side view product photo white background studio lighting photorealistic'),
-  'White / Beige Slides':                buildPollinationsUrl('minimal white beige leather slides sandals product photo white background studio lighting photorealistic'),
-  'Unstructured Linen Blazer':           buildPollinationsUrl('mens unstructured beige linen blazer jacket product photo white background studio lighting photorealistic'),
-  'Lightweight Overshirt — Grey / Stone':'https://images.unsplash.com/photo-1618354691373-d851c5c3a990?auto=format&fit=crop&w=400&h=300&q=80',
-  'Canvas Tote Bag — Natural / Cream':   buildPollinationsUrl('natural cream canvas tote bag product photo white background studio lighting photorealistic'),
-  'Simple Leather Belt — Tan / Cognac':  buildPollinationsUrl('tan cognac leather belt buckle product photo white background studio lighting photorealistic'),
-  'Minimal Silver / Gold Watch':         buildPollinationsUrl('minimal silver gold watch clean dial product photo white background studio lighting photorealistic'),
-};
-
-const DEFAULT_ITEMS = [
-  { id:1001, name:'Lyocell Shirt — H&M',      price:2499, link:'https://www.myntra.com/shirts/hm',          cat:'Clothing',    priority:'high', note:'100% Lyocell, fluid silhouette, elevated casual',       imgUrl: CURATED_IMAGES['Lyocell Shirt — H&M'],      bought:false, date:1700000001 },
-  { id:1002, name:'Lyocell Shirt — ZARA',      price:2999, link:'https://www.zara.com/in/',                  cat:'Clothing',    priority:'high', note:'100% Lyocell, sharper cut, smart-casual',               imgUrl: CURATED_IMAGES['Lyocell Shirt — ZARA'],     bought:false, date:1700000002 },
-  { id:1003, name:'White Tailored Trousers',   price:3499, link:'https://www.myntra.com/trousers',           cat:'Clothing',    priority:'high', note:'100% Cotton, tailored fit, clean minimal base',          imgUrl: CURATED_IMAGES['White Tailored Trousers'],  bought:false, date:1700000003 },
-  { id:1004, name:'Beige Trousers — ZARA',     price:3299, link:'https://www.zara.com/in/',                  cat:'Clothing',    priority:'high', note:'100% Cotton, neutral versatile pairing',                 imgUrl: CURATED_IMAGES['Beige Trousers — ZARA'],    bought:false, date:1700000004 },
-  { id:1005, name:'White Leather Sneakers',    price:3500, link:'https://www.myntra.com/adidas-stan-smith',  cat:'Footwear',    priority:'high', note:'Adidas Stan Smith or ZARA minimalist sneaker',           imgUrl: CURATED_IMAGES['White Leather Sneakers'],   bought:false, date:1700000005 },
-  { id:1006, name:'Tan Suede Loafers',         price:4200, link:'https://www.myntra.com/loafers',            cat:'Footwear',    priority:'mid',  note:'ZARA or Mango, pairs with beige trousers perfectly',     imgUrl: CURATED_IMAGES['Tan Suede Loafers'],        bought:false, date:1700000006 },
-  { id:1007, name:'White / Beige Slides',      price:1499, link:'https://www.myntra.com/slides',             cat:'Footwear',    priority:'low',  note:'H&M leather slide or ZARA flat sandal',                 imgUrl: CURATED_IMAGES['White / Beige Slides'],     bought:false, date:1700000007 },
-  { id:1008, name:'Unstructured Linen Blazer', price:3500, link:'https://www.myntra.com/blazers/hm',         cat:'Clothing',    priority:'mid',  note:'Beige or off-white, H&M or ZARA, breathable for summer', imgUrl: CURATED_IMAGES['Unstructured Linen Blazer'],bought:false, date:1700000008 },
-  { id:1009, name:'Lightweight Overshirt — Grey / Stone', price:2000, link:'https://www.myntra.com/overshirt', cat:'Clothing', priority:'mid',  note:'H&M lyocell overshirt or ZARA fluid shirt-jacket',       imgUrl: CURATED_IMAGES['Lightweight Overshirt — Grey / Stone'], bought:false, date:1700000009 },
-  { id:1010, name:'Canvas Tote Bag — Natural / Cream',    price:850,  link:'https://www.myntra.com/tote-bags', cat:'Accessories',priority:'low', note:'Functional, editorial, matches every piece',             imgUrl: CURATED_IMAGES['Canvas Tote Bag — Natural / Cream'],    bought:false, date:1700000010 },
-  { id:1011, name:'Simple Leather Belt — Tan / Cognac',   price:1200, link:'https://www.myntra.com/belts',    cat:'Accessories',priority:'mid',  note:'Only accent needed when tucking shirts into trousers',   imgUrl: CURATED_IMAGES['Simple Leather Belt — Tan / Cognac'],   bought:false, date:1700000011 },
-  { id:1012, name:'Minimal Silver / Gold Watch',          price:4500, link:'https://www.myntra.com/watches',  cat:'Accessories',priority:'mid',  note:'One metal, worn consistently — anchors the whole aesthetic', imgUrl: CURATED_IMAGES['Minimal Silver / Gold Watch'],       bought:false, date:1700000012 },
+const DEFAULT=[
+  {id:1001,name:'Lyocell Shirt — H&M',price:2499,link:'https://www.myntra.com/shirts/hm',cat:'Clothing',priority:'high',note:'100% Lyocell, fluid silhouette',imgUrl:'',imgData:'',bought:false,date:1700000001},
+  {id:1002,name:'White Tailored Trousers',price:3499,link:'https://www.myntra.com/trousers',cat:'Clothing',priority:'high',note:'100% Cotton, tailored fit',imgUrl:'',imgData:'',bought:false,date:1700000002},
+  {id:1003,name:'White Leather Sneakers',price:3500,link:'https://www.myntra.com/adidas-stan-smith',cat:'Footwear',priority:'high',note:'Adidas Stan Smith or ZARA minimalist',imgUrl:'',imgData:'',bought:false,date:1700000003},
+  {id:1004,name:'Tan Suede Loafers',price:4200,link:'https://www.myntra.com/loafers',cat:'Footwear',priority:'mid',note:'ZARA or Mango, pairs with beige trousers',imgUrl:'',imgData:'',bought:false,date:1700000004},
+  {id:1005,name:'Unstructured Linen Blazer',price:3500,link:'https://www.myntra.com/blazers/hm',cat:'Clothing',priority:'mid',note:'Beige or off-white, H&M or ZARA',imgUrl:'',imgData:'',bought:false,date:1700000005},
+  {id:1006,name:'Canvas Tote Bag',price:850,link:'https://www.myntra.com/tote-bags',cat:'Accessories',priority:'low',note:'Natural/cream canvas, functional',imgUrl:'',imgData:'',bought:false,date:1700000006},
+  {id:1007,name:'Leather Belt — Tan',price:1200,link:'https://www.myntra.com/belts',cat:'Accessories',priority:'mid',note:'Simple minimal belt',imgUrl:'',imgData:'',bought:false,date:1700000007},
+  {id:1008,name:'Minimal Silver Watch',price:4500,link:'https://www.myntra.com/watches',cat:'Accessories',priority:'mid',note:'Clean dial, silver tone',imgUrl:'',imgData:'',bought:false,date:1700000008},
 ];
 
-const stored = localStorage.getItem('shoplist_v3');
-let items = stored ? JSON.parse(stored) : DEFAULT_ITEMS;
-let currentFilter = 'All';
-let currentSort   = 'date';
-let formOpen = false;
+let items=JSON.parse(localStorage.getItem('shoplist_v5')||'null')||[...DEFAULT];
+let filter='All',sort='date',editId=null,isEdit=false;
+let currentImgData='',currentImgUrl='',currentImgTab='upload';
 
-function save(){ localStorage.setItem('shoplist_v3', JSON.stringify(items)); }
-function fmt(n){ return '₹' + Number(n||0).toLocaleString('en-IN'); }
-function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function save(){localStorage.setItem('shoplist_v5',JSON.stringify(items));}
+function fmt(n){return '₹'+Number(n||0).toLocaleString('en-IN');}
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function host(u){try{return new URL(u).hostname.replace('www.','');}catch{return 'Link';}}
 
-function toggleForm(){
-  formOpen = !formOpen;
-  document.getElementById('form-body').classList.toggle('open', formOpen);
-  document.getElementById('form-toggle').classList.toggle('open', formOpen);
+let toastT;
+function toast(msg,type=''){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.className='toast show'+(type?' '+type:'');
+  clearTimeout(toastT);toastT=setTimeout(()=>t.className='toast',2800);
 }
 
-async function addItem(){
-  const name = document.getElementById('f-name').value.trim();
-  if(!name){ document.getElementById('f-name').focus(); return; }
-  const price     = parseFloat(document.getElementById('f-price').value)||0;
-  const link      = document.getElementById('f-link').value.trim();
-  const cat       = document.getElementById('f-cat').value;
-  const priority  = document.getElementById('f-priority').value;
-  const note      = document.getElementById('f-note').value.trim();
-  const customImg = document.getElementById('f-img').value.trim();
-
-  const btn = document.querySelector('.btn-primary');
-  btn.textContent = '🎨 Generating image…';
-  btn.disabled = true;
-
-  const imgUrl = await getSmartImage(name, note, cat, customImg);
-
-  btn.textContent = '+ Add to Catalog';
-  btn.disabled = false;
-
-  items.unshift({ id:Date.now(), name, price, link, cat, priority, note, imgUrl, bought:false, date:Date.now() });
-  save(); clearForm(); render();
-  formOpen = true; toggleForm();
+// ── IMAGE HANDLING ──
+function triggerImgClick(){
+  if(currentImgTab==='upload') document.getElementById('img-file-input').click();
 }
+
+function switchImgTab(tab){
+  currentImgTab=tab;
+  document.getElementById('tab-upload').classList.toggle('active',tab==='upload');
+  document.getElementById('tab-url').classList.toggle('active',tab==='url');
+  document.getElementById('img-url-row').classList.toggle('show',tab==='url');
+  const box=document.getElementById('img-preview-box');
+  box.onclick = tab==='upload' ? ()=>document.getElementById('img-file-input').click() : null;
+}
+
+function handleFileUpload(input){
+  const file=input.files[0];
+  if(!file)return;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    currentImgData=e.target.result;
+    currentImgUrl='';
+    showImgPreview(currentImgData);
+  };
+  reader.readAsDataURL(file);
+}
+
+function previewFromUrl(url){
+  if(!url){clearImgPreview();return;}
+  currentImgUrl=url;currentImgData='';
+  showImgPreview(url);
+}
+
+function showImgPreview(src){
+  const box=document.getElementById('img-preview-box');
+  box.classList.add('has-img');
+  box.innerHTML=`<img src="${esc(src)}" referrerpolicy="no-referrer" style="width:100%;height:100%;object-fit:cover;border-radius:8px" onerror="clearImgPreview()">`;
+  document.getElementById('img-remove-btn').style.display='block';
+  document.getElementById('ipb-placeholder')&&(document.getElementById('ipb-placeholder').style.display='none');
+}
+
+function clearImgPreview(){
+  const box=document.getElementById('img-preview-box');
+  box.classList.remove('has-img');
+  box.innerHTML=`<div class="ipb-placeholder" id="ipb-placeholder"><div class="ipb-icon">🖼</div><div class="ipb-text">Click to upload image<br>or paste a URL below</div><div class="ipb-hint">JPG, PNG, WEBP — from your device or internet</div></div>`;
+  document.getElementById('img-remove-btn').style.display='none';
+  currentImgData='';currentImgUrl='';
+  box.onclick=()=>document.getElementById('img-file-input').click();
+}
+
+function removeImage(){clearImgPreview();}
+
+// ── MODAL ──
+function openAdd(){
+  isEdit=false;editId=null;
+  document.getElementById('modal-title').textContent='Add new item';
+  document.getElementById('modal-save-btn').textContent='Add item';
+  document.getElementById('modal-del-btn').style.display='none';
+  clearForm();
+  clearImgPreview();
+  switchImgTab('upload');
+  document.getElementById('modal-overlay').classList.remove('hidden');
+  document.body.style.overflow='hidden';
+  setTimeout(()=>document.getElementById('m-name').focus(),100);
+}
+
+function openEdit(id){
+  const it=items.find(i=>i.id===id);if(!it)return;
+  isEdit=true;editId=id;
+  document.getElementById('modal-title').textContent='Edit item';
+  document.getElementById('modal-save-btn').textContent='Save changes';
+  document.getElementById('modal-del-btn').style.display='flex';
+  document.getElementById('m-name').value=it.name||'';
+  document.getElementById('m-price').value=it.price||'';
+  document.getElementById('m-link').value=it.link||'';
+  document.getElementById('m-note').value=it.note||'';
+  document.getElementById('m-cat').value=it.cat||'Clothing';
+  document.getElementById('m-priority').value=it.priority||'mid';
+  document.getElementById('m-bought').value=String(!!it.bought);
+  document.getElementById('m-img-url').value=it.imgUrl||'';
+  currentImgData=it.imgData||'';
+  currentImgUrl=it.imgUrl||'';
+  const src=it.imgData||it.imgUrl;
+  if(src){showImgPreview(src);}else{clearImgPreview();}
+  if(it.imgUrl&&!it.imgData){switchImgTab('url');}else{switchImgTab('upload');}
+  document.getElementById('modal-overlay').classList.remove('hidden');
+  document.body.style.overflow='hidden';
+}
+
+function closeModal(){
+  document.getElementById('modal-overlay').classList.add('hidden');
+  document.body.style.overflow='';
+  editId=null;isEdit=false;
+}
+
+function bgClose(e){if(e.target===document.getElementById('modal-overlay'))closeModal();}
 
 function clearForm(){
-  ['f-name','f-price','f-link','f-note','f-img'].forEach(id=>document.getElementById(id).value='');
-  document.getElementById('f-priority').value='mid';
+  ['m-name','m-price','m-link','m-note','m-img-url'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('m-priority').value='mid';
+  document.getElementById('m-bought').value='false';
+}
+
+function saveModal(){
+  const name=document.getElementById('m-name').value.trim();
+  if(!name){toast('Please enter an item name','err');document.getElementById('m-name').focus();return;}
+  const imgUrl=document.getElementById('m-img-url').value.trim()||currentImgUrl;
+  const imgData=currentImgData;
+  const obj={
+    name,
+    price:parseFloat(document.getElementById('m-price').value)||0,
+    link:document.getElementById('m-link').value.trim(),
+    cat:document.getElementById('m-cat').value,
+    priority:document.getElementById('m-priority').value,
+    note:document.getElementById('m-note').value.trim(),
+    imgUrl,imgData,
+    bought:document.getElementById('m-bought').value==='true',
+  };
+  if(isEdit&&editId){
+    const idx=items.findIndex(i=>i.id===editId);
+    if(idx>-1){items[idx]={...items[idx],...obj};}
+    toast('Changes saved ✓','ok');
+  }else{
+    items.unshift({id:Date.now(),...obj,date:Date.now()});
+    toast('Item added ✓','ok');
+  }
+  save();closeModal();render();
+}
+
+function deleteFromModal(){
+  if(!confirm('Remove this item from your catalog?'))return;
+  items=items.filter(i=>i.id!==editId);
+  save();closeModal();render();toast('Item removed');
+}
+
+// ── INLINE IMAGE UPLOAD ON CARD (when hovering card with no image) ──
+function triggerCardUpload(id){
+  const inp=document.getElementById('card-file-'+id);
+  if(inp)inp.click();
+}
+
+function handleCardFileUpload(id,input){
+  const file=input.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    const it=items.find(i=>i.id===id);
+    if(it){it.imgData=e.target.result;it.imgUrl='';save();render();}
+    toast('Image added ✓','ok');
+  };
+  reader.readAsDataURL(file);
+}
+
+// ── FILTER / SORT ──
+function setFilter(f,btn){
+  filter=f;
+  document.querySelectorAll('.s-nav-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  const titles={All:'All <em>Items</em>',Pending:'<em>Pending</em> Items',Bought:'<em>Bought</em> Items'};
+  document.getElementById('pg-title').innerHTML=titles[f]||`${f} <em>Items</em>`;
+  render();
+}
+
+function setSort(s,btn){
+  sort=s;
+  document.querySelectorAll('.sort-chip').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');render();
 }
 
 function toggleBought(id){
-  const it = items.find(i=>i.id===id);
-  if(it){ it.bought=!it.bought; save(); render(); }
-}
-
-function deleteItem(id){
-  if(!confirm('Remove this item from your catalog?')) return;
-  items = items.filter(i=>i.id!==id);
-  save(); render();
-}
-
-function setFilter(f, btn){
-  currentFilter = f;
-  document.querySelectorAll('.nav-item').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-  const label = f==='All'?'ALL <span>ITEMS</span>': f.toUpperCase().replace(/(\s\S+)$/,' <span>$&</span>');
-  document.getElementById('pg-heading').innerHTML = `${f.toUpperCase()} <span>▸</span>`;
-  render();
-}
-
-function setSort(s, btn){
-  currentSort = s;
-  document.querySelectorAll('.sort-pill').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-  render();
+  const it=items.find(i=>i.id===id);if(!it)return;
+  it.bought=!it.bought;save();render();
+  toast(it.bought?'Marked as bought ✓':'Moved to pending',it.bought?'ok':'');
 }
 
 function getFiltered(){
-  let list = [...items];
-  if(currentFilter==='Pending')      list = list.filter(i=>!i.bought);
-  else if(currentFilter==='Bought')  list = list.filter(i=>i.bought);
-  else if(CATS.includes(currentFilter)) list = list.filter(i=>i.cat===currentFilter);
-
-  if(currentSort==='price-asc')   list.sort((a,b)=>a.price-b.price);
-  else if(currentSort==='price-desc') list.sort((a,b)=>b.price-a.price);
-  else if(currentSort==='priority'){
-    const r={high:0,mid:1,low:2};
-    list.sort((a,b)=>r[a.priority]-r[b.priority]);
-  } else list.sort((a,b)=>b.date-a.date);
+  let list=[...items];
+  const q=document.getElementById('search-input').value.trim().toLowerCase();
+  if(q)list=list.filter(i=>i.name.toLowerCase().includes(q)||i.note.toLowerCase().includes(q)||(i.cat||'').toLowerCase().includes(q));
+  if(filter==='Pending')list=list.filter(i=>!i.bought);
+  else if(filter==='Bought')list=list.filter(i=>i.bought);
+  else if(CATS.includes(filter))list=list.filter(i=>i.cat===filter);
+  const r={high:0,mid:1,low:2};
+  if(sort==='price-asc')list.sort((a,b)=>a.price-b.price);
+  else if(sort==='price-desc')list.sort((a,b)=>b.price-a.price);
+  else if(sort==='priority')list.sort((a,b)=>r[a.priority]-r[b.priority]);
+  else list.sort((a,b)=>b.date-a.date);
   return list;
 }
 
-// Group by category for catalog view
-function groupBy(list, key){ 
-  return list.reduce((acc, item)=>{ (acc[item[key]]||(acc[item[key]]=[])).push(item); return acc; },{});
-}
-
-function priLabel(p){ return {high:'Must have',mid:'Want it',low:'Someday'}[p]||''; }
-function priClass(p){ return {high:'pr-high',mid:'pr-mid',low:'pr-low'}[p]||''; }
-
+// ── RENDER ──
 function renderCard(it){
-  const imgEl = `
-    <div class="pcard-img">
-      <div class="img-loading" id="imgload-${it.id}"><div class="spinner"></div></div>
-      <img src="${esc(it.imgUrl)}" alt="${esc(it.name)}" referrerpolicy="no-referrer"
-        onload="const l=document.getElementById('imgload-'+it.id);if(l)l.style.display='none';"
-        onerror="this.onerror=null;this.src=CAT_FALLBACK[it.cat]||CAT_FALLBACK.Other;const l=document.getElementById('imgload-'+it.id);if(l)l.style.display='none';"
-      />
-      <div class="priority-ribbon ${priClass(it.priority)}">${priLabel(it.priority)}</div>
-      ${it.bought ? '<div class="bought-ribbon">✓ Bought</div>' : ''}
-    </div>`;
+  const imgSrc=it.imgData||it.imgUrl;
+  const hasImg=!!imgSrc;
+
+  const imgHtml=hasImg
+    ?`<img src="${esc(imgSrc)}" referrerpolicy="no-referrer" alt="${esc(it.name)}"
+        style="opacity:0;transition:opacity .3s"
+        onload="this.style.opacity=1"
+        onerror="this.style.display='none';this.insertAdjacentHTML('afterend','<div class=pcard-img-placeholder><div class=pip-icon>${ICONS[it.cat]||'📦'}</div><div class=pip-text>${esc(it.cat)}</div></div>')">`
+    :`<div class="pcard-img-placeholder"><div class="pip-icon">${ICONS[it.cat]||'📦'}</div><div class="pip-text">${esc(it.cat)}</div></div>`;
+
+  // If no image, show upload zone on hover
+  const uploadZone=!hasImg?`
+    <div class="pcard-upload-zone" onclick="event.stopPropagation();triggerCardUpload(${it.id})">
+      <div class="puz-icon">⊕</div>
+      <div class="puz-text">Add image<br><span style="font-size:9px;color:var(--ink3)">click to upload from device</span></div>
+    </div>
+    <input type="file" id="card-file-${it.id}" class="pcard-file-input" accept="image/*" onchange="handleCardFileUpload(${it.id},this)">
+  `:'';
 
   return `
-    <div class="pcard ${it.bought?'bought':''}" id="pc-${it.id}">
-      ${imgEl}
-      <div class="pcard-body">
-        <div class="pcard-cat">${esc(it.cat)}</div>
-        <div class="pcard-name">${esc(it.name)}</div>
-        ${it.note ? `<div class="pcard-note">${esc(it.note)}</div>` : ''}
-        <div class="pcard-footer">
-          <div class="pcard-price">${it.price ? fmt(it.price) : '—'}</div>
-          <div class="pcard-actions">
-            ${it.link ? `<a class="pa-link" href="${esc(it.link)}" target="_blank" rel="noopener" title="Buy now">↗</a>` : ''}
-            <button class="pa-btn img-refresh" onclick="refreshImage(${it.id})" title="Refresh image">⟳</button>
-            <button class="pa-btn buy" onclick="toggleBought(${it.id})" title="${it.bought?'Mark pending':'Mark bought'}">${it.bought?'↩':'✓'}</button>
-            <button class="pa-btn del" onclick="deleteItem(${it.id})" title="Remove">✕</button>
-          </div>
-        </div>
+  <div class="pcard${it.bought?' is-bought':''}" id="pc-${it.id}">
+    <div class="pcard-img-wrap">
+      ${imgHtml}
+      ${uploadZone}
+      <div class="pcard-badges">
+        <span class="badge ${PC[it.priority]}">${PL[it.priority]}</span>
+        ${it.bought?'<span class="badge b-bought">✓ Bought</span>':''}
       </div>
-    </div>`;
+      <div class="pcard-overlay">
+        <button class="ov-btn ov-edit" onclick="openEdit(${it.id})" title="Edit">✎</button>
+        <button class="ov-btn ov-buy" onclick="toggleBought(${it.id})" title="${it.bought?'Unmark':'Mark bought'}">${it.bought?'↩':'✓'}</button>
+        <button class="ov-btn ov-del" onclick="delItem(${it.id})" title="Delete">✕</button>
+      </div>
+    </div>
+    <div class="pcard-body">
+      <div class="pcard-cat">${esc(it.cat)}</div>
+      <div class="pcard-name">${esc(it.name)}</div>
+      ${it.note?`<div class="pcard-note">${esc(it.note)}</div>`:''}
+      <div class="pcard-footer">
+        <div class="pcard-price">${it.price?fmt(it.price):'—'}</div>
+        ${it.link?`<a class="pcard-link" href="${esc(it.link)}" target="_blank" rel="noopener">↗ ${esc(host(it.link))}</a>`:''}
+      </div>
+    </div>
+  </div>`;
+}
+
+function delItem(id){
+  if(!confirm('Remove this item?'))return;
+  items=items.filter(i=>i.id!==id);save();render();toast('Item removed');
 }
 
 function render(){
-  const total    = items.length;
-  const bought   = items.filter(i=>i.bought).length;
-  const totalVal = items.reduce((s,i)=>s+(i.price||0),0);
-  const spentVal = items.filter(i=>i.bought).reduce((s,i)=>s+(i.price||0),0);
-  const pct      = totalVal ? Math.round((spentVal/totalVal)*100) : 0;
+  const total=items.length,bought=items.filter(i=>i.bought).length;
+  const totalVal=items.reduce((s,i)=>s+(i.price||0),0);
+  const spentVal=items.filter(i=>i.bought).reduce((s,i)=>s+(i.price||0),0);
+  const pct=totalVal?Math.round(spentVal/totalVal*100):0;
 
-  // sidebar counts
-  const allFilters = ['All','Pending','Bought',...CATS];
-  allFilters.forEach(c=>{
-    const el = document.getElementById('nc-'+c);
-    if(!el) return;
-    if(c==='All')     el.textContent = total;
-    else if(c==='Pending') el.textContent = items.filter(i=>!i.bought).length;
-    else if(c==='Bought')  el.textContent = bought;
-    else el.textContent = items.filter(i=>i.cat===c).length;
+  ['All','Pending','Bought',...CATS].forEach(c=>{
+    const el=document.getElementById('nc-'+c);if(!el)return;
+    el.textContent=c==='All'?total:c==='Pending'?items.filter(i=>!i.bought).length:c==='Bought'?bought:items.filter(i=>i.cat===c).length;
   });
+  document.getElementById('sb-val').textContent=fmt(totalVal);
+  document.getElementById('sb-spent').textContent=fmt(spentVal)+' spent';
+  document.getElementById('sb-pct').textContent=pct+'%';
+  document.getElementById('sb-bar').style.width=pct+'%';
+  document.getElementById('st-total').textContent=total;
+  document.getElementById('st-bought').textContent=bought;
+  document.getElementById('st-value').textContent=fmt(totalVal);
+  document.getElementById('st-spent').textContent=fmt(spentVal);
 
-  document.getElementById('bp-val').textContent   = fmt(totalVal);
-  document.getElementById('bp-spent').textContent = fmt(spentVal)+' spent';
-  document.getElementById('bp-pct').textContent   = pct+'%';
-  document.getElementById('bp-fill').style.width  = pct+'%';
-
-  document.getElementById('st-total').textContent  = total;
-  document.getElementById('st-bought').textContent = bought;
-  document.getElementById('st-value').textContent  = fmt(totalVal);
-  document.getElementById('st-spent').textContent  = fmt(spentVal);
-
-  const filtered = getFiltered();
-  const catalog  = document.getElementById('catalog');
+  const filtered=getFiltered();
+  const wrap=document.getElementById('catalog-wrap');
 
   if(!filtered.length){
-    catalog.innerHTML = `<div class="empty-state">
-      <div class="es-icon">🛍</div>
-      <div class="es-title">${items.length ? 'Nothing here yet' : 'Your catalog is empty'}</div>
-      <div class="es-sub">${items.length ? 'Try a different filter.' : 'Click "+ Add new item" above to start building your catalog.'}</div>
-    </div>`;
+    wrap.innerHTML=`<div class="empty-state"><div class="es-icon">${items.length?'🔍':'🛍'}</div><div class="es-title">${items.length?'Nothing found':'Catalog is empty'}</div><div class="es-sub">${items.length?'Try a different search or filter.':'Click "+ Add new item" to start building your catalog.'}</div></div>`;
     return;
   }
 
-  // If filtering by a specific category or pending/bought → single flat grid
-  const singleView = currentFilter !== 'All';
-  if(singleView){
-    catalog.innerHTML = `<div class="cards-row">${filtered.map(renderCard).join('')}</div>`;
+  if(filter!=='All'||document.getElementById('search-input').value.trim()){
+    wrap.innerHTML=`<div class="cards-grid">${filtered.map(renderCard).join('')}</div>`;
     return;
   }
 
-  // All view → group by category, show sections
-  const grouped = groupBy(filtered, 'cat');
-  const orderedCats = CATS.filter(c => grouped[c] && grouped[c].length > 0);
-
-  catalog.innerHTML = orderedCats.map(cat => `
-    <div class="cat-section">
-      <div class="cat-section-title">
-        <span style="font-size:20px">${CAT_ICONS[cat]||'📦'}</span>
-        <span class="cat-section-name">${cat.toUpperCase()}</span>
+  const grouped={};
+  filtered.forEach(it=>{(grouped[it.cat]||(grouped[it.cat]=[])).push(it);});
+  wrap.innerHTML=CATS.filter(c=>grouped[c]?.length).map(cat=>{
+    const ci=grouped[cat],cv=ci.reduce((s,i)=>s+(i.price||0),0);
+    return `<div class="cat-section">
+      <div class="cat-section-head">
+        <span class="cat-section-icon">${ICONS[cat]}</span>
+        <span class="cat-section-name">${cat}</span>
         <div class="cat-section-line"></div>
-        <span class="cat-section-count">${grouped[cat].length} item${grouped[cat].length!==1?'s':''}</span>
+        <span class="cat-section-meta">${ci.length} item${ci.length!==1?'s':''}</span>
+        ${cv?`<span class="cat-section-val">${fmt(cv)}</span>`:''}
       </div>
-      <div class="cards-row">${grouped[cat].map(renderCard).join('')}</div>
-    </div>
-  `).join('');
+      <div class="cards-grid">${ci.map(renderCard).join('')}</div>
+    </div>`;
+  }).join('');
 }
 
-document.getElementById('f-name').addEventListener('keydown', e=>{ if(e.key==='Enter') addItem(); });
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
+document.getElementById('m-name').addEventListener('keydown',e=>{if(e.key==='Enter'&&!isEdit)saveModal();});
 render();
 </script>
 </body>
