@@ -153,6 +153,7 @@ select option{background:#fff}
 .pa-btn:hover{border-color:var(--muted2);color:var(--ink)}
 .pa-btn.buy:hover{background:var(--green-bg);border-color:var(--green);color:var(--green)}
 .pa-btn.del:hover{background:#fde8e2;border-color:#e88080;color:var(--accent)}
+.pa-btn.img-refresh:hover{background:#eef2ff;border-color:#8080d0;color:#5050b0}
 .pa-link{width:30px;height:30px;border-radius:8px;border:1.5px solid var(--border);background:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:13px;color:var(--muted);transition:all .15s;text-decoration:none;flex-shrink:0}
 .pa-link:hover{border-color:var(--accent);color:var(--accent)}
 
@@ -305,26 +306,111 @@ select option{background:#fff}
 const CATS = ['Clothing','Electronics','Books','Footwear','Accessories','Health','Food','Appliances','Other'];
 const CAT_ICONS = {Clothing:'👕',Electronics:'📱',Books:'📚',Footwear:'👟',Accessories:'🎒',Health:'💊',Food:'🍜',Appliances:'🏠',Other:'⭐'};
 
-// Unsplash source for automatic images — uses item name + category as query
-function getImageUrl(name, cat) {
-  const q = encodeURIComponent(name + ' ' + cat);
-  // Use Unsplash source which reliably serves images without API key
-  return `https://source.unsplash.com/400x300/?${q}`;
+// ─── AI IMAGE GENERATION ────────────────────────────────────────────────────
+// Uses Claude API to craft a precise image generation prompt from the item
+// title + note, then generates a real product-like image via Pollinations.ai
+// (free, no API key needed, works from any domain including GitHub Pages)
+
+async function buildImagePrompt(name, note, cat) {
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 120,
+        messages: [{
+          role: 'user',
+          content: `Write a short, precise image generation prompt (max 20 words) for this product:
+Name: ${name}
+Note: ${note || 'none'}
+Category: ${cat}
+
+Rules:
+- Describe the exact product visually (color, material, style, shape)
+- End with: "product photo, white background, studio lighting, photorealistic"
+- Return ONLY the prompt text, nothing else`
+        }]
+      })
+    });
+    const data = await res.json();
+    const prompt = data.content?.[0]?.text?.trim();
+    if (prompt && prompt.length > 5) return prompt;
+  } catch(e) {
+    console.warn('Prompt generation failed:', e);
+  }
+  // Fallback: build prompt directly from name + note
+  return `${name} ${note || ''} ${cat}, product photo, white background, studio lighting, photorealistic`;
 }
 
+function buildPollinationsUrl(prompt) {
+  const encoded = encodeURIComponent(prompt);
+  return `https://image.pollinations.ai/prompt/${encoded}?width=400&height=300&nologo=true&model=flux&seed=${Math.floor(Math.random()*99999)}`;
+}
+
+async function getSmartImage(name, note, cat, customImg) {
+  if (customImg) return customImg;
+  // Use curated image for known default capsule items
+  if (CURATED_IMAGES[name]) return CURATED_IMAGES[name];
+  // Build AI prompt then generate image
+  const prompt = await buildImagePrompt(name, note, cat);
+  return buildPollinationsUrl(prompt);
+}
+
+async function refreshImage(id) {
+  const it = items.find(i => i.id === id);
+  if (!it) return;
+  const loadEl = document.querySelector(`#pc-${it.id} .img-loading`);
+  const imgEl  = document.querySelector(`#pc-${it.id} .pcard-img img`);
+  if (loadEl) loadEl.style.display = 'flex';
+  if (imgEl)  imgEl.style.opacity = '0.2';
+  const prompt = await buildImagePrompt(it.name, it.note, it.cat);
+  it.imgUrl = buildPollinationsUrl(prompt);
+  save(); render();
+}
+
+// Category fallback — also generated via Pollinations
+const CAT_FALLBACK = {
+  Clothing:    buildPollinationsUrl('folded cotton shirt neutral color product photo white background studio lighting photorealistic'),
+  Footwear:    buildPollinationsUrl('clean minimal sneaker side view product photo white background photorealistic'),
+  Electronics: buildPollinationsUrl('modern smartphone gadget product photo white background studio lighting photorealistic'),
+  Books:       buildPollinationsUrl('stack of books hardcover product photo white background photorealistic'),
+  Accessories: buildPollinationsUrl('leather bag accessory product photo white background studio lighting photorealistic'),
+  Health:      buildPollinationsUrl('health wellness product white bottle product photo white background photorealistic'),
+  Food:        buildPollinationsUrl('fresh food ingredients product photo white background studio lighting photorealistic'),
+  Appliances:  buildPollinationsUrl('modern kitchen appliance product photo white background studio lighting photorealistic'),
+  Other:       buildPollinationsUrl('generic product on white background studio lighting photorealistic'),
+};
+
+// Curated high-quality prompts → generated images for default capsule items
+const CURATED_IMAGES = {
+  'Lyocell Shirt — H&M':                  buildPollinationsUrl('mens lyocell shirt fluid drape soft beige minimal product photo white background studio lighting photorealistic'),
+  'Lyocell Shirt — ZARA':                 buildPollinationsUrl('mens ZARA lyocell shirt sharp cut smooth white minimal product photo white background studio lighting photorealistic'),
+  'White Tailored Trousers':              buildPollinationsUrl('mens white tailored cotton trousers flat lay product photo white background studio lighting photorealistic'),
+  'Beige Trousers — ZARA':               buildPollinationsUrl('mens beige cotton ZARA trousers folded product photo white background studio lighting photorealistic'),
+  'White Leather Sneakers':              buildPollinationsUrl('white leather minimal sneakers side view clean product photo white background studio lighting photorealistic'),
+  'Tan Suede Loafers':                   buildPollinationsUrl('tan suede mens loafer shoes side view product photo white background studio lighting photorealistic'),
+  'White / Beige Slides':                buildPollinationsUrl('minimal white beige leather slides sandals product photo white background studio lighting photorealistic'),
+  'Unstructured Linen Blazer':           buildPollinationsUrl('mens unstructured beige linen blazer jacket product photo white background studio lighting photorealistic'),
+  'Lightweight Overshirt — Grey / Stone':'https://images.unsplash.com/photo-1618354691373-d851c5c3a990?auto=format&fit=crop&w=400&h=300&q=80',
+  'Canvas Tote Bag — Natural / Cream':   buildPollinationsUrl('natural cream canvas tote bag product photo white background studio lighting photorealistic'),
+  'Simple Leather Belt — Tan / Cognac':  buildPollinationsUrl('tan cognac leather belt buckle product photo white background studio lighting photorealistic'),
+  'Minimal Silver / Gold Watch':         buildPollinationsUrl('minimal silver gold watch clean dial product photo white background studio lighting photorealistic'),
+};
+
 const DEFAULT_ITEMS = [
-  { id:1001, name:'Lyocell Shirt — H&M', price:2499, link:'https://www.myntra.com/shirts/hm', cat:'Clothing', priority:'high', note:'100% Lyocell, fluid silhouette, elevated casual', imgUrl:'https://source.unsplash.com/400x300/?lyocell,shirt,minimal', bought:false, date:1700000001 },
-  { id:1002, name:'Lyocell Shirt — ZARA', price:2999, link:'https://www.zara.com/in/', cat:'Clothing', priority:'high', note:'100% Lyocell, sharper cut, smart-casual', imgUrl:'https://source.unsplash.com/400x300/?zara,shirt,men', bought:false, date:1700000002 },
-  { id:1003, name:'White Tailored Trousers', price:3499, link:'https://www.myntra.com/trousers', cat:'Clothing', priority:'high', note:'100% Cotton, tailored fit, clean minimal base', imgUrl:'https://source.unsplash.com/400x300/?white,trousers,tailored,men', bought:false, date:1700000003 },
-  { id:1004, name:'Beige Trousers — ZARA', price:3299, link:'https://www.zara.com/in/', cat:'Clothing', priority:'high', note:'100% Cotton, neutral versatile pairing', imgUrl:'https://source.unsplash.com/400x300/?beige,trousers,men,cotton', bought:false, date:1700000004 },
-  { id:1005, name:'White Leather Sneakers', price:3500, link:'https://www.myntra.com/adidas-stan-smith', cat:'Footwear', priority:'high', note:'Adidas Stan Smith or ZARA minimalist sneaker', imgUrl:'https://source.unsplash.com/400x300/?white,leather,sneakers,minimal', bought:false, date:1700000005 },
-  { id:1006, name:'Tan Suede Loafers', price:4200, link:'https://www.myntra.com/loafers', cat:'Footwear', priority:'mid', note:'ZARA or Mango, pairs with beige trousers perfectly', imgUrl:'https://source.unsplash.com/400x300/?tan,suede,loafers,men', bought:false, date:1700000006 },
-  { id:1007, name:'White / Beige Slides', price:1499, link:'https://www.myntra.com/slides', cat:'Footwear', priority:'low', note:'H&M leather slide or ZARA flat sandal', imgUrl:'https://source.unsplash.com/400x300/?white,slides,sandal,minimal', bought:false, date:1700000007 },
-  { id:1008, name:'Unstructured Linen Blazer', price:3500, link:'https://www.myntra.com/blazers/hm', cat:'Clothing', priority:'mid', note:'Beige or off-white, H&M or ZARA, breathable for summer', imgUrl:'https://source.unsplash.com/400x300/?linen,blazer,beige,men', bought:false, date:1700000008 },
-  { id:1009, name:'Lightweight Overshirt — Grey / Stone', price:2000, link:'https://www.myntra.com/overshirt', cat:'Clothing', priority:'mid', note:'H&M lyocell overshirt or ZARA fluid shirt-jacket', imgUrl:'https://source.unsplash.com/400x300/?overshirt,grey,men,casual', bought:false, date:1700000009 },
-  { id:1010, name:'Canvas Tote Bag — Natural / Cream', price:850, link:'https://www.myntra.com/tote-bags', cat:'Accessories', priority:'low', note:'Functional, editorial, matches every piece', imgUrl:'https://source.unsplash.com/400x300/?canvas,tote,bag,natural', bought:false, date:1700000010 },
-  { id:1011, name:'Simple Leather Belt — Tan / Cognac', price:1200, link:'https://www.myntra.com/belts', cat:'Accessories', priority:'mid', note:'Only accent needed when tucking shirts into trousers', imgUrl:'https://source.unsplash.com/400x300/?leather,belt,tan,minimal', bought:false, date:1700000011 },
-  { id:1012, name:'Minimal Silver / Gold Watch', price:4500, link:'https://www.myntra.com/watches', cat:'Accessories', priority:'mid', note:'One metal, worn consistently — anchors the whole aesthetic', imgUrl:'https://source.unsplash.com/400x300/?minimal,watch,silver,elegant', bought:false, date:1700000012 },
+  { id:1001, name:'Lyocell Shirt — H&M',      price:2499, link:'https://www.myntra.com/shirts/hm',          cat:'Clothing',    priority:'high', note:'100% Lyocell, fluid silhouette, elevated casual',       imgUrl: CURATED_IMAGES['Lyocell Shirt — H&M'],      bought:false, date:1700000001 },
+  { id:1002, name:'Lyocell Shirt — ZARA',      price:2999, link:'https://www.zara.com/in/',                  cat:'Clothing',    priority:'high', note:'100% Lyocell, sharper cut, smart-casual',               imgUrl: CURATED_IMAGES['Lyocell Shirt — ZARA'],     bought:false, date:1700000002 },
+  { id:1003, name:'White Tailored Trousers',   price:3499, link:'https://www.myntra.com/trousers',           cat:'Clothing',    priority:'high', note:'100% Cotton, tailored fit, clean minimal base',          imgUrl: CURATED_IMAGES['White Tailored Trousers'],  bought:false, date:1700000003 },
+  { id:1004, name:'Beige Trousers — ZARA',     price:3299, link:'https://www.zara.com/in/',                  cat:'Clothing',    priority:'high', note:'100% Cotton, neutral versatile pairing',                 imgUrl: CURATED_IMAGES['Beige Trousers — ZARA'],    bought:false, date:1700000004 },
+  { id:1005, name:'White Leather Sneakers',    price:3500, link:'https://www.myntra.com/adidas-stan-smith',  cat:'Footwear',    priority:'high', note:'Adidas Stan Smith or ZARA minimalist sneaker',           imgUrl: CURATED_IMAGES['White Leather Sneakers'],   bought:false, date:1700000005 },
+  { id:1006, name:'Tan Suede Loafers',         price:4200, link:'https://www.myntra.com/loafers',            cat:'Footwear',    priority:'mid',  note:'ZARA or Mango, pairs with beige trousers perfectly',     imgUrl: CURATED_IMAGES['Tan Suede Loafers'],        bought:false, date:1700000006 },
+  { id:1007, name:'White / Beige Slides',      price:1499, link:'https://www.myntra.com/slides',             cat:'Footwear',    priority:'low',  note:'H&M leather slide or ZARA flat sandal',                 imgUrl: CURATED_IMAGES['White / Beige Slides'],     bought:false, date:1700000007 },
+  { id:1008, name:'Unstructured Linen Blazer', price:3500, link:'https://www.myntra.com/blazers/hm',         cat:'Clothing',    priority:'mid',  note:'Beige or off-white, H&M or ZARA, breathable for summer', imgUrl: CURATED_IMAGES['Unstructured Linen Blazer'],bought:false, date:1700000008 },
+  { id:1009, name:'Lightweight Overshirt — Grey / Stone', price:2000, link:'https://www.myntra.com/overshirt', cat:'Clothing', priority:'mid',  note:'H&M lyocell overshirt or ZARA fluid shirt-jacket',       imgUrl: CURATED_IMAGES['Lightweight Overshirt — Grey / Stone'], bought:false, date:1700000009 },
+  { id:1010, name:'Canvas Tote Bag — Natural / Cream',    price:850,  link:'https://www.myntra.com/tote-bags', cat:'Accessories',priority:'low', note:'Functional, editorial, matches every piece',             imgUrl: CURATED_IMAGES['Canvas Tote Bag — Natural / Cream'],    bought:false, date:1700000010 },
+  { id:1011, name:'Simple Leather Belt — Tan / Cognac',   price:1200, link:'https://www.myntra.com/belts',    cat:'Accessories',priority:'mid',  note:'Only accent needed when tucking shirts into trousers',   imgUrl: CURATED_IMAGES['Simple Leather Belt — Tan / Cognac'],   bought:false, date:1700000011 },
+  { id:1012, name:'Minimal Silver / Gold Watch',          price:4500, link:'https://www.myntra.com/watches',  cat:'Accessories',priority:'mid',  note:'One metal, worn consistently — anchors the whole aesthetic', imgUrl: CURATED_IMAGES['Minimal Silver / Gold Watch'],       bought:false, date:1700000012 },
 ];
 
 const stored = localStorage.getItem('shoplist_v3');
@@ -343,20 +429,27 @@ function toggleForm(){
   document.getElementById('form-toggle').classList.toggle('open', formOpen);
 }
 
-function addItem(){
+async function addItem(){
   const name = document.getElementById('f-name').value.trim();
   if(!name){ document.getElementById('f-name').focus(); return; }
-  const price    = parseFloat(document.getElementById('f-price').value)||0;
-  const link     = document.getElementById('f-link').value.trim();
-  const cat      = document.getElementById('f-cat').value;
-  const priority = document.getElementById('f-priority').value;
-  const note     = document.getElementById('f-note').value.trim();
-  const customImg= document.getElementById('f-img').value.trim();
-  const imgUrl   = customImg || getImageUrl(name, cat);
+  const price     = parseFloat(document.getElementById('f-price').value)||0;
+  const link      = document.getElementById('f-link').value.trim();
+  const cat       = document.getElementById('f-cat').value;
+  const priority  = document.getElementById('f-priority').value;
+  const note      = document.getElementById('f-note').value.trim();
+  const customImg = document.getElementById('f-img').value.trim();
+
+  const btn = document.querySelector('.btn-primary');
+  btn.textContent = '🎨 Generating image…';
+  btn.disabled = true;
+
+  const imgUrl = await getSmartImage(name, note, cat, customImg);
+
+  btn.textContent = '+ Add to Catalog';
+  btn.disabled = false;
 
   items.unshift({ id:Date.now(), name, price, link, cat, priority, note, imgUrl, bought:false, date:Date.now() });
   save(); clearForm(); render();
-  // close form
   formOpen = true; toggleForm();
 }
 
@@ -419,9 +512,9 @@ function renderCard(it){
   const imgEl = `
     <div class="pcard-img">
       <div class="img-loading" id="imgload-${it.id}"><div class="spinner"></div></div>
-      <img src="${esc(it.imgUrl)}" alt="${esc(it.name)}"
-        onload="document.getElementById('imgload-${it.id}').style.display='none'"
-        onerror="this.parentElement.innerHTML='<div class=\\'img-placeholder\\'><div class=\\'ph-icon\\'>${CAT_ICONS[it.cat]||'📦'}</div><div class=\\'ph-text\\'>${esc(it.cat)}</div></div>'"
+      <img src="${esc(it.imgUrl)}" alt="${esc(it.name)}" referrerpolicy="no-referrer"
+        onload="const l=document.getElementById('imgload-'+it.id);if(l)l.style.display='none';"
+        onerror="this.onerror=null;this.src=CAT_FALLBACK[it.cat]||CAT_FALLBACK.Other;const l=document.getElementById('imgload-'+it.id);if(l)l.style.display='none';"
       />
       <div class="priority-ribbon ${priClass(it.priority)}">${priLabel(it.priority)}</div>
       ${it.bought ? '<div class="bought-ribbon">✓ Bought</div>' : ''}
@@ -438,6 +531,7 @@ function renderCard(it){
           <div class="pcard-price">${it.price ? fmt(it.price) : '—'}</div>
           <div class="pcard-actions">
             ${it.link ? `<a class="pa-link" href="${esc(it.link)}" target="_blank" rel="noopener" title="Buy now">↗</a>` : ''}
+            <button class="pa-btn img-refresh" onclick="refreshImage(${it.id})" title="Refresh image">⟳</button>
             <button class="pa-btn buy" onclick="toggleBought(${it.id})" title="${it.bought?'Mark pending':'Mark bought'}">${it.bought?'↩':'✓'}</button>
             <button class="pa-btn del" onclick="deleteItem(${it.id})" title="Remove">✕</button>
           </div>
